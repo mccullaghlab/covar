@@ -10,8 +10,11 @@ def rot_covar(covar,rot):
     N3 = covar.shape[0]
     N = N3//3
     for i in range(N):
-        for j in range(N):
-            covar[i*3:(i+1)*3,j*3:(j+1)*3] = np.dot(covar[i*3:(i+1)*3,j*3:(j+1)*3],rot)
+        for j in range(i,N):
+            covar[i*3:(i+1)*3,j*3:(j+1)*3] = np.dot(rot,np.dot(covar[i*3:(i+1)*3,j*3:(j+1)*3],rot.T))
+            if (i!=j) :
+                covar[j*3:(j+1)*3,i*3:(i+1)*3] = covar[i*3:(i+1)*3,j*3:(j+1)*3].T
+
     return covar
 
 #############################################################################################################
