@@ -22,7 +22,7 @@ def iterative_align_average(coord,selGroup,frameStart=0,frameStop=-1,deltaFrame=
             ref = np.copy(selGroup.positions)
         else:
             R = align.rotation_matrix(selGroup.positions, ref)[0]
-            rotMat[frameCount,:,:] = np.copy(R.T)
+            rotMat[frameCount,:,:] = np.copy(R)
             selGroup.rotate(R)
         avg += selGroup.positions
         alignedPos[frameCount,:,:] = selGroup.positions
@@ -39,7 +39,7 @@ def iterative_align_average(coord,selGroup,frameStart=0,frameStop=-1,deltaFrame=
         for ts in coord.trajectory[frameStart:frameStop:deltaFrame]:
             alignedPos[frameCount,:,:] -= np.mean(alignedPos[frameCount,:,:],axis=0)
             R = align.rotation_matrix(alignedPos[frameCount,:,:], avg)[0]
-            rotMat[frameCount,:,:]  = np.dot(rotMat[frameCount,:,:],R.T)
+            rotMat[frameCount,:,:]  = np.dot(rotMat[frameCount,:,:],R)
             alignedPos[frameCount,:,:] = np.dot(alignedPos[frameCount,:,:],R.T)
             newAvg += alignedPos[frameCount,:,:]
             frameCount += 1
